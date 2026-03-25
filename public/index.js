@@ -26,21 +26,23 @@ input.addEventListener('input', () => {
                 : '';
 
             const tag = cv.language
-                ? `<span class="tag">${cv.language}</span>`
+                ? `<span class="tag"><i class="fa-solid fa-code"></i> ${cv.language}</span>`
                 : '';
 
             return `
                 <div class="cv-card">
                     <div class="card-header">
                         <h3>${cv.name}</h3>
-                        <p class="email">${cv.email}</p>
+                        <p class="email"><i class="fa-solid fa-envelope"></i> ${cv.email}</p>
                     </div>
 
                     ${bio}
 
                     <div class="card-footer">
                         ${tag}
-                        <a href="/cv/${cv.id}" class="view-btn">View CV</a>
+                        <a href="/cv/${cv.id}" class="view-btn">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>&nbsp;&nbsp;View CV
+                        </a>
                     </div>
                 </div>
             `;

@@ -3,6 +3,7 @@
 <head>
     <title>AstonCV</title>
     <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -12,11 +13,20 @@
             <span>AstonCV</span>
         </a>
 
+        <% if (user) { %>
+            <span class="nav-welcome">Welcome, <%= user.name %></span>
+        <% } %>
+
         <div class="nav-links">
             <% if (user) { %>
-                <span>Welcome, <%= user.name %></span>
-                <a href="/edit">Edit my CV</a>
-                <a href="/logout">Logout</a>
+                <a href="/edit" class="nav-icon-link">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span class="nav-tooltip">Edit My CV</span>
+                </a>
+                <a href="/logout" class="nav-icon-link">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span class="nav-tooltip">Logout</span>
+                </a>
             <% } else { %>
                 <a href="/register" class="nav-btn">Register</a>
                 <a href="/login">Login</a>
@@ -27,12 +37,15 @@
     <!-- hero -->
     <section class="hero">
         <div class="hero-content">
-            <img src="assets/aston_logo.jpeg" alt="Aston University" class="hero-logo">
+            <img src="/assets/aston_logo.jpeg" alt="Aston University" class="hero-logo">
             <h1>Discover Developer CVs from Aston University</h1>
             <p>Search and explore real developer CVs... or upload your own in minutes.</p>
         </div>
 
-        <input type="text" id="searchInput" placeholder="Search by name, language or bio..." aria-label="Search CVs">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Search by name, language or bio..." aria-label="Search CVs">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </div>
     </section>
 
     <!-- cv cards -->
@@ -43,26 +56,28 @@
             <% cvs.forEach(cv => { %>
                 <div class="cv-card">
 
-                    <!-- Header -->
+                    <!-- header -->
                     <div class="card-header">
                         <h3><%= cv.name %></h3>
-                        <p class="email"><%= cv.email %></p>
+                        <p class="email"><i class="fa-solid fa-envelope"></i> <%= cv.email %></p>
                     </div>
 
-                    <!-- Bio Preview -->
+                    <!-- bio -->
                     <% if (cv.bio) { %>
                         <p class="bio-preview">
                             <%= cv.bio.substring(0, 70) %><%= cv.bio.length > 70 ? '...' : '' %>
                         </p>
                     <% } %>
 
-                    <!-- Footer (Tag + Button) -->
+                    <!-- footer -->
                     <div class="card-footer">
                         <% if (cv.language) { %>
-                            <span class="tag"><%= cv.language %></span>
+                            <span class="tag"><i class="fa-solid fa-code"></i> <%= cv.language %></span>
                         <% } %>
 
-                        <a href="/cv/<%= cv.id %>" class="view-btn">View CV</a>
+                        <a href="/cv/<%= cv.id %>" class="view-btn">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>&nbsp;&nbsp;View CV
+                        </a>
                     </div>
 
                 </div>
