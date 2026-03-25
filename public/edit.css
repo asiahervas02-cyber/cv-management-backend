@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif
+    font-family: "Segoe UI", sans-serif;
 }
 
 body {
@@ -11,7 +11,7 @@ body {
     line-height: 1.6;
 }
 
-/* Navbar */
+/* navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -50,6 +50,36 @@ body {
     color: #7b0a7f;
 }
 
+/* nav icon links */
+.nav-icon-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+}
+
+.nav-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    background: #3a003b;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+    position: absolute;
+    top: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.nav-icon-link:hover .nav-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
 /* container */
 .container {
     max-width: 800px;
@@ -75,6 +105,9 @@ body {
 }
 
 .form-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     font-size: 0.8rem;
     color: #600064;
     font-weight: 800;
@@ -91,6 +124,7 @@ body {
     display: block;
     font-size: 0.85rem;
     color: #7a6f7d;
+    margin-bottom: 6px;
 }
 
 .form-group input,
@@ -125,6 +159,9 @@ body {
 
 /* save button */
 .save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     background: #600064;
     color: #ffffff;
     border: none;
@@ -134,11 +171,41 @@ body {
     font-weight: 700;
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
+    margin-bottom: 40px;
 }
 
 .save-btn:hover {
     background: #7b0a7f;
     transform: translateY(-1px);
+}
+
+/* tooltip */
+.tooltip {
+    position: relative;
+    cursor: pointer;
+    color: #600064;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    background: #3a003b;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 125%;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }
 
 /* footer */
@@ -150,14 +217,12 @@ footer {
     margin-top: 60px;
 }
 
-/* Main line */
 footer p:first-child {
     font-size: 0.95rem;
     font-weight: 600;
     color: #600064;
 }
 
-/* Subtext */
 .footer-subtext {
     margin-top: 6px;
     font-size: 0.82rem;

@@ -3,16 +3,22 @@
 <head>
     <title>Edit CV — AstonCV</title>
     <link rel="stylesheet" href="/edit.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
     <nav class="navbar">
         <a href="/" class="logo">AstonCV</a>
         <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/logout">Logout</a>
-    </div>
+            <a href="/" class="nav-icon-link">
+                <i class="fa-solid fa-house"></i>
+                <span class="nav-tooltip">Home</span>
+            </a>
+            <a href="/logout" class="nav-icon-link">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="nav-tooltip">Logout</span>
+            </a>
+        </div>
     </nav>
 
     <main class="container">
@@ -21,85 +27,87 @@
             <p class="error"><%= error %></p>
         <% } %>
 
-    <form method="POST" action="/edit">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <form method="POST" action="/edit">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-        <section class="form-section">
-            <h2>Basic Information</h2>
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="name" value="<%= cv.name %>" required>
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" value="<%= cv.email %>" required>
-            </div>
-            <div class="form-group">
-                <label>Key Programming Language</label>
-                <input type="text" name="language" value="<%= cv.language || '' %>">
-            </div>
-            <div class="form-group">
-                <label>Profile / Bio</label>
-                <textarea name="profile"><%= cv.profile || '' %></textarea>
-            </div>
-        </section>
+            <section class="form-section">
+                <h2><i class="fa-solid fa-user"></i> <span>Basic Information</span></h2>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" value="<%= cv.name %>" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="<%= cv.email %>" required>
+                </div>
+                <div class="form-group">
+                    <label>Key Programming Language</label>
+                    <input type="text" name="language" value="<%= cv.language || '' %>">
+                </div>
+                <div class="form-group">
+                    <label>Bio <span class="tooltip"><i class="fa-solid fa-circle-info"></i><span class="tooltip-text">This will be shown as a preview on the CV browse page</span></span></label>
+                    <textarea name="bio"><%= cv.bio || '' %></textarea>
+                </div>
+            </section>
 
-        <section class="form-section">
-            <h2>Education</h2>
-            <div class="form-group">
-                <input type="text" name="education" value="<%= cv.education || '' %>" placeholder="e.g. BSc Computer Science, Aston University">
-            </div>
-        </section>
+            <section class="form-section">
+                <h2><i class="fa-solid fa-graduation-cap"></i> <span>Education</span></h2>
+                <div class="form-group">
+                    <input type="text" name="education" value="<%= cv.education || '' %>" placeholder="e.g. BSc Computer Science, Aston University">
+                </div>
+            </section>
 
-        <section class="form-section">
-            <h2>Summary</h2>
-            <div class="form-group">
-                <textarea name="summary"><%= cv.summary || '' %></textarea>
-            </div>
-        </section>
+            <section class="form-section">
+                <h2><i class="fa-solid fa-align-left"></i> <span>Summary</span></h2>
+                <div class="form-group">
+                    <textarea name="summary"><%= cv.summary || '' %></textarea>
+                </div>
+            </section>
 
-        <section class="form-section">
-            <h2>Skills</h2>
-            <div class="form-group">
-                <textarea name="skills" placeholder="e.g. HTML, CSS, JavaScript, Node.js"><%= cv.skills || '' %></textarea>
-            </div>
-        </section>
+            <section class="form-section">
+                <h2><i class="fa-solid fa-code"></i> <span>Skills</span></h2>
+                <div class="form-group">
+                    <textarea name="skills" placeholder="e.g. HTML, CSS, JavaScript, Node.js"><%= cv.skills || '' %></textarea>
+                </div>
+            </section>
 
-        <section class="form-section">
-            <h2>Languages</h2>
-            <div class="form-group">
-                <input type="text" name="languages" value="<%= cv.languages || '' %>" placeholder="e.g. English (Native), Spanish (Intermediate)">
-            </div>
-        </section>
+            <section class="form-section">
+                <h2><i class="fa-solid fa-language"></i> <span>Languages</span></h2>
+                <div class="form-group">
+                    <input type="text" name="languages" value="<%= cv.languages || '' %>" placeholder="e.g. English (Native), Spanish (Intermediate)">
+                </div>
+            </section>
 
-        <section class="form-section">
-            <h2>Links</h2>
-            <div class="form-group">
-                <input type="text" name="links" value="<%= cv.links || '' %>" placeholder="e.g. https://github.com/username">
-            </div>
-        </section>
+            <section class="form-section">
+                <h2><i class="fa-solid fa-link"></i> <span>Links</span></h2>
+                <div class="form-group">
+                    <input type="text" name="links" value="<%= cv.links || '' %>" placeholder="e.g. https://github.com/username">
+                </div>
+            </section>
 
-        <section class="form-section">
-            <h2>References</h2>
-            <div class="form-group">
-                <textarea name="refs" placeholder="Name, Role, Company. Email: ..."><%= cv.refs || '' %></textarea>
-            </div>
-        </section>
+            <section class="form-section">
+                <h2><i class="fa-solid fa-address-book"></i> <span>References</span></h2>
+                <div class="form-group">
+                    <textarea name="refs" placeholder="Name, Role, Company. Email: ..."><%= cv.refs || '' %></textarea>
+                </div>
+            </section>
 
-        <section class="form-section">
-            <h2>Change Password</h2>
-            <div class="form-group">
-                <label>Current Password</label>
-                <input type="password" name="currentPassword">
-            </div>
-            <div class="form-group">
-                <label>New Password</label>
-                <input type="password" name="newPassword">
-            </div>
-        </section>
+            <section class="form-section">
+                <h2><i class="fa-solid fa-lock"></i> <span>Change Password</span></h2>
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" name="currentPassword">
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" name="newPassword">
+                </div>
+            </section>
 
-        <button type="submit" class="save-btn">Save Changes</button>
-    </form>
+            <button type="submit" class="save-btn">
+                <i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save Changes
+            </button>
+        </form>
     </main>
 
     <footer>
