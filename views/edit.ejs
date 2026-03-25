@@ -1,31 +1,60 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Edit CV - AstonCV</title>
-    </head>
-    <body>
-        <a href="/">Back to Home</a>
-        <h1>Edit your CV</h1>
-        <% if (error) { %>
-            <p style="color:red"><%= error %></p>
-        <% } %>
-        <form method="POST" action="/edit">
-            <input type="text" name="name" placeholder="Full Name" value="<%= cv.name %>" required><br>
-            <input type="email" name="email" placeholder="Email" value="<%= cv.email %>" required><br>
-            <input type="text" name="education" placeholder="Education" value="<%= cv.education || '' %>"><br>
-            <input type="text" name="language" placeholder="Key Programming Language" value="<%= cv.language || '' %>"><br>
-            <textarea name="summary" placeholder="Summary"><%= cv.summary || '' %></textarea><br>
-            <textarea name="skills" placeholder="Skills"><%= cv.skills || '' %></textarea><br>
-            <textarea name="profile" placeholder="Profile"><%= cv.profile || '' %></textarea><br>
-            <input type="text" name="languages" placeholder="Languages" value="<%= cv.languages || '' %>"><br>
-            <input type="text" name="links" placeholder="Links" value="<%= cv.links || '' %>"><br>
-            <textarea name="refs" placeholder="References"><%= cv.refs || '' %></textarea><br>
-            <hr>
-            <h3>Change Password</h3>
-            <input type="password" name="currentPassword" placeholder="Current Password"><br>
-            <input type="password" name="newPassword" placeholder="New Password"><br>
-            <button type="submit">Save</button>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-  </form>
-    </body>
+<head>
+    <title>Edit CV - AstonCV</title>
+</head>
+<body>
+
+    <a href="/">Back to Home</a>
+
+    <h1>Edit your CV</h1>
+
+    <% if (error) { %>
+        <p style="color:red"><%= error %></p>
+    <% } %>
+
+    <form method="POST" action="/edit">
+
+        <!-- basic info -->
+        <input type="text" name="name" placeholder="Full Name" value="<%= cv.name %>" required><br>
+
+        <input type="email" name="email" placeholder="Email" value="<%= cv.email %>" required><br>
+
+        <!-- bio -->
+        <textarea name="bio" placeholder="Short Bio (e.g. Full-stack developer with 2 years experience)"><%= cv.bio || '' %></textarea><br>
+
+        <input type="text" name="education" placeholder="Education" value="<%= cv.education || '' %>"><br>
+
+        <input type="text" name="language" placeholder="Key Programming Language" value="<%= cv.language || '' %>"><br>
+
+        <!-- cv content -->
+        <textarea name="summary" placeholder="Summary"><%= cv.summary || '' %></textarea><br>
+
+        <textarea name="skills" placeholder="Skills"><%= cv.skills || '' %></textarea><br>
+
+        <textarea name="profile" placeholder="Profile"><%= cv.profile || '' %></textarea><br>
+
+        <input type="text" name="languages" placeholder="Languages" value="<%= cv.languages || '' %>"><br>
+
+        <input type="text" name="links" placeholder="Links" value="<%= cv.links || '' %>"><br>
+
+        <textarea name="refs" placeholder="References"><%= cv.refs || '' %></textarea><br>
+
+        <hr>
+
+        <!-- password section -->
+        <h3>Change Password</h3>
+
+        <input type="password" name="currentPassword" placeholder="Current Password"><br>
+
+        <input type="password" name="newPassword" placeholder="New Password"><br>
+
+        <button type="submit">Save</button>
+
+        <!-- csrf -->
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    </form>
+
+</body>
 </html>

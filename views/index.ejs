@@ -1,44 +1,82 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>AstonCV</title>
-    </head>
-    <body>
-        <h1>AstonCV</h1>
-        <% if (user) { %>
-            <span>Welcome, <%= user.name %></span> |
-            <a href="/edit">Edit my CV</a> |
-            <a href="/logout">Logout</a>
-        <% } else { %>
-            <a href="/register">Register</a> |
-            <a href="/login">Login</a>
-        <% } %>
+<html lang="en">
+<head>
+    <title>AstonCV</title>
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
 
-        <form method="GET" action="/" id="searchForm">
-            <input type="text" name="search" id="searchInput" placeholder="Search by name or language" value="<%= search %>">
-        </form>
+    <!-- nav bar -->
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <span>AstonCV</span>
+        </a>
 
-        <h2> All CVs</h2>
-            <ul id="cvList">
-                <% cvs.forEach(cv => { %>
-                <li>
-                    <%= cv.name %> - <%= cv.email %> - <%= cv.language %>
-                    <a href="/cv/<%= cv.id %>">View CV</a>
-                </li>
+        <div class="nav-links">
+            <% if (user) { %>
+                <span>Welcome, <%= user.name %></span>
+                <a href="/edit">Edit my CV</a>
+                <a href="/logout">Logout</a>
+            <% } else { %>
+                <a href="/register" class="nav-btn">Register</a>
+                <a href="/login">Login</a>
+            <% } %>
+        </div>
+    </nav>
+
+    <!-- hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <img src="assets/aston_logo.jpeg" alt="Aston University" class="hero-logo">
+            <h1>Discover Developer CVs from Aston University</h1>
+            <p>Search and explore real developer CVs... or upload your own in minutes.</p>
+        </div>
+
+        <input type="text" id="searchInput" placeholder="Search by name, language or bio..." aria-label="Search CVs">
+    </section>
+
+    <!-- cv cards -->
+    <main class="container">
+        <h2>Browse <%= cvs.length %> CVs</h2>
+
+        <div id="cvList" class="cv-grid">
+            <% cvs.forEach(cv => { %>
+                <div class="cv-card">
+
+                    <!-- Header -->
+                    <div class="card-header">
+                        <h3><%= cv.name %></h3>
+                        <p class="email"><%= cv.email %></p>
+                    </div>
+
+                    <!-- Bio Preview -->
+                    <% if (cv.bio) { %>
+                        <p class="bio-preview">
+                            <%= cv.bio.substring(0, 70) %><%= cv.bio.length > 70 ? '...' : '' %>
+                        </p>
+                    <% } %>
+
+                    <!-- Footer (Tag + Button) -->
+                    <div class="card-footer">
+                        <% if (cv.language) { %>
+                            <span class="tag"><%= cv.language %></span>
+                        <% } %>
+
+                        <a href="/cv/<%= cv.id %>" class="view-btn">View CV</a>
+                    </div>
+
+                </div>
             <% }) %>
-            </ul>
+        </div>
+    </main>
 
-        <script>
-            const input = document.getElementById('searchInput');
-            const list = document.getElementById('cvList');
+    <!-- footer -->
+    <footer>
+        <p>AstonCV © 2026</p>
+        <p class="footer-subtext">Developed by Hasnain A</p>
+    </footer>
 
-            input.addEventListener('input', async () => {
-                const res = await fetch(`/api/search?q=${encodeURIComponent(input.value)}`);
-                const cvs = await res.json();
-                list.innerHTML = cvs.map(cv =>
-                    `<li><a href="/cv/${cv.id}">${cv.name}</a> — ${cv.email} — ${cv.language}</li>`
-                ).join('');
-            });
-        </script>
-    </body>
+    <script src="/index.js"></script>
+
+</body>
 </html>

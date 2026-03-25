@@ -33,7 +33,7 @@ app.use(session({
 
 // csrf middleware
 app.use((req, res, next) => {
-    if(!req.session.csrfToken) {
+    if (!req.session.csrfToken) {
         req.session.csrfToken = crypto.randomBytes(32).toString('hex');
     }
     res.locals.csrfToken = req.session.csrfToken;
@@ -50,45 +50,79 @@ app.use((req, res, next) => {
     next();
 });
 
+// user info for navbar
 app.use(async (req, res, next) => {
-    if (req.session.userId) {
-        const [rows] = await db.query('SELECT id, name FROM cvs WHERE id = ?', [req.session.userId]);
-        res.locals.user = rows[0] || null;
-    } else {
-        res.locals.user = null;
+    try {
+        if (req.session.userId) {
+            const [rows] = await db.query(
+                'SELECT id, name FROM cvs WHERE id = ?',
+                [req.session.userId]
+            );
+            res.locals.user = rows[0] || null;
+        } else {
+            res.locals.user = null;
+        }
+        next();
+    } catch (err) {
+        next(err);
     }
-    next();
 });
 
 // home - list all CVs
-app.get('/', async (req, res) => {
-    const search = req.query.search || '';
-    let cvs;
-    if (search) {
-        [cvs] = await db.query(
-            'SELECT id, name, email, language FROM cvs WHERE name LIKE ? OR language LIKE ?', [`%${search}%`, `%${search}%`]
-        );
-    } else {
-        [cvs] = await db.query('SELECT id, name, email, language FROM cvs');
+app.get('/', async (req, res, next) => {
+    try {
+        const search = req.query.search || '';
+        let cvs;
+
+        if (search) {
+            [cvs] = await db.query(
+                'SELECT id, name, email, language, bio FROM cvs WHERE name LIKE ? OR language LIKE ? OR bio LIKE ?',
+                [`%${search}%`, `%${search}%`, `%${search}%`]
+            );
+        } else {
+            [cvs] = await db.query(
+                'SELECT id, name, email, language, bio FROM cvs'
+            );
+        }
+
+        res.render('index', { cvs, search });
+    } catch (err) {
+        next(err);
     }
-    res.render('index', { cvs, search });
 });
 
 // api search endpoint
-app.get('/api/search', async (req, res) => {
-    const q = req.query.q || '';
-    const [cvs] = await db.query(
-        'SELECT id, name, email, language FROM cvs WHERE name LIKE ? OR language LIKE ?',
-        [`%${q}%`, `%${q}%`]
-    );
-    res.json(cvs);
+app.get('/api/search', async (req, res, next) => {
+    try {
+        const q = req.query.q || '';
+
+        const [cvs] = await db.query(
+            'SELECT id, name, email, language, bio FROM cvs WHERE name LIKE ? OR language LIKE ? OR bio LIKE ?',
+            [`%${q}%`, `%${q}%`, `%${q}%`]
+        );
+
+        res.json(cvs);
+    } catch (err) {
+        next(err);
+    }
 });
 
 // cv detail
-app.get('/cv/:id', async (req, res) => {
-    const [rows] = await db.query('SELECT * FROM cvs WHERE id = ?', [req.params.id]);
-    if (rows.length === 0) return res.status(404).send('CV not found');
-    res.render('cv', { cv: rows[0] });
+app.get('/cv/:id', async (req, res, next) => {
+    try {
+        const [rows] = await db.query(
+            'SELECT * FROM cvs WHERE id = ?',
+            [req.params.id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).send('CV not found');
+        }
+
+        res.render('cv', { cv: rows[0] });
+    } catch (err) {
+        next(err);
+    }
 });
 
 // register
@@ -96,13 +130,30 @@ app.get('/register', (req, res) => {
     res.render('register', { error: null });
 });
 
-app.post('/register', async (req,res) => {
-    const { name, email, password } = req.body;
-    const [existing] = await db.query('SELECT id FROM cvs WHERE email = ?', [email]);
-    if (existing.length > 0) return res.render('register', { error: 'Email already registered' });
-    const hashed = await bcrypt.hash(password, 10);
-    await db.query('INSERT INTO cvs (name, email, password) VALUES (?, ?, ?)', [name, email, hashed]);
-    res.redirect('/login');
+app.post('/register', async (req, res, next) => {
+    try {
+        const { name, email, password } = req.body;
+
+        const [existing] = await db.query(
+            'SELECT id FROM cvs WHERE email = ?',
+            [email]
+        );
+
+        if (existing.length > 0) {
+            return res.render('register', { error: 'Email already registered' });
+        }
+
+        const hashed = await bcrypt.hash(password, 10);
+
+        await db.query(
+            'INSERT INTO cvs (name, email, password) VALUES (?, ?, ?)',
+            [name, email, hashed]
+        );
+
+        res.redirect('/login');
+    } catch (err) {
+        next(err);
+    }
 });
 
 // login
@@ -110,49 +161,122 @@ app.get('/login', (req, res) => {
     res.render('login', { error: null });
 });
 
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const [rows] = await db.query('SELECT * FROM cvs WHERE email = ?', [email]);
-    if (rows.length === 0) return res.render('login', { error: 'Invalid email or password' });
-    const match = await bcrypt.compare(password, rows[0].password);
-    if (!match) return res.render('login', { error: 'Invalid email or password' });
-    req.session.userId = rows[0].id;
-    res.redirect('/');
+app.post('/login', async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+
+        const [rows] = await db.query(
+            'SELECT * FROM cvs WHERE email = ?',
+            [email]
+        );
+
+        if (rows.length === 0) {
+            return res.render('login', { error: 'Invalid email or password' });
+        }
+
+        const match = await bcrypt.compare(password, rows[0].password);
+
+        if (!match) {
+            return res.render('login', { error: 'Invalid email or password' });
+        }
+
+        req.session.userId = rows[0].id;
+        res.redirect('/');
+    } catch (err) {
+        next(err);
+    }
 });
 
 // logout
 app.get('/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/');
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
 });
 
 // edit cv
-app.get('/edit', async (req, res) => {
-    if (!req.session.userId) return res.redirect('/login');
-    const [rows] = await db.query('SELECT * FROM cvs WHERE id = ?', [req.session.userId]);
-    res.render('edit', { cv: rows[0], error: null });
+app.get('/edit', async (req, res, next) => {
+    try {
+        if (!req.session.userId) {
+            return res.redirect('/login');
+        }
+
+        const [rows] = await db.query(
+            'SELECT * FROM cvs WHERE id = ?',
+            [req.session.userId]
+        );
+
+        res.render('edit', { cv: rows[0], error: null });
+    } catch (err) {
+        next(err);
+    }
 });
 
-app.post('/edit', async (req, res) => {
-    if (!req.session.userId) return res.redirect('/login');
-    const { name, email, education, language, summary, skills, profile, languages, links, refs, currentPassword, newPassword } = req.body;
-
-    const [rows] = await db.query('SELECT * FROM cvs WHERE id = ?', [req.session.userId]);
-    let hashedPassword = rows[0].password;
-
-    if (currentPassword && newPassword) {
-        const match = await bcrypt.compare(currentPassword, rows[0].password);
-        if (!match) {
-            return res.render('edit', { cv: rows[0], error: 'Current password is incorrect' });
+app.post('/edit', async (req, res, next) => {
+    try {
+        if (!req.session.userId) {
+            return res.redirect('/login');
         }
-        hashedPassword = await bcrypt.hash(newPassword, 10);
-    }
 
-    await db.query(
-        'UPDATE cvs SET name=?, email=?, education=?, language=?, summary=?, skills=?, profile=?, languages=?, links=?, refs=?, password=? WHERE id=?',
-        [name, email, education, language, summary, skills, profile, languages, links, refs, hashedPassword, req.session.userId]
-    );
-    res.redirect('/cv/' + req.session.userId);
+        const {
+            name,
+            email,
+            education,
+            language,
+            bio,
+            summary,
+            skills,
+            profile,
+            languages,
+            links,
+            refs,
+            currentPassword,
+            newPassword
+        } = req.body;
+
+        const [rows] = await db.query(
+            'SELECT * FROM cvs WHERE id = ?',
+            [req.session.userId]
+        );
+
+        let hashedPassword = rows[0].password;
+
+        if (currentPassword && newPassword) {
+            const match = await bcrypt.compare(currentPassword, rows[0].password);
+
+            if (!match) {
+                return res.render('edit', {
+                    cv: rows[0],
+                    error: 'Current password is incorrect'
+                });
+            }
+
+            hashedPassword = await bcrypt.hash(newPassword, 10);
+        }
+
+        await db.query(
+            'UPDATE cvs SET name=?, email=?, education=?, language=?, bio=?, summary=?, skills=?, profile=?, languages=?, links=?, refs=?, password=? WHERE id=?',
+            [
+                name,
+                email,
+                education,
+                language,
+                bio,
+                summary,
+                skills,
+                profile,
+                languages,
+                links,
+                refs,
+                hashedPassword,
+                req.session.userId
+            ]
+        );
+
+        res.redirect('/cv/' + req.session.userId);
+    } catch (err) {
+        next(err);
+    }
 });
 
 app.listen(process.env.PORT, () => {

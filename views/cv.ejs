@@ -1,47 +1,89 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title><%= cv.name %> - AstonCV</title>
-    </head>
-    <body>
-        <a href="/">Back</a>
+<head>
+    <title><%= cv.name %> - AstonCV</title>
+</head>
+<body>
 
+    <a href="/">Back</a>
+
+    <!-- header -->
+    <header>
         <h1><%= cv.name %></h1>
         <p><%= cv.email %></p>
 
+        <% if (cv.language) { %>
+            <p><strong>Key Skill:</strong> <%= cv.language %></p>
+        <% } %>
+    </header>
+
+    <hr>
+
+    <!-- bio -->
+    <% if (cv.bio) { %>
+        <section>
+            <h2>Bio</h2>
+            <p><%= cv.bio %></p>
+        </section>
         <hr>
+    <% } %>
 
-        <h2>Summary</h2>
-        <p><%= cv.summary %></p>
-
+    <!-- summary -->
+    <% if (cv.summary) { %>
+        <section>
+            <h2>Summary</h2>
+            <p><%= cv.summary %></p>
+        </section>
         <hr>
+    <% } %>
 
-        <h2>Education</h2>
-        <p><%= cv.education %></p>
-
+    <!-- education -->
+    <% if (cv.education) { %>
+        <section>
+            <h2>Education</h2>
+            <p><%= cv.education %></p>
+        </section>
         <hr>
+    <% } %>
 
-        <h2>Key Language</h2>
-        <p><%= cv.language %></p>
-
+    <!-- skills -->
+    <% if (cv.skills) { %>
+        <section>
+            <h2>Skills</h2>
+            <p><%= cv.skills %></p>
+        </section>
         <hr>
+    <% } %>
 
-        <h2>Skills</h2>
-        <p><%= cv.skills %></p>
-
+    <!-- languages -->
+    <% if (cv.languages) { %>
+        <section>
+            <h2>Languages</h2>
+            <p><%= cv.languages %></p>
+        </section>
         <hr>
+    <% } %>
 
-        <h2>Languages</h2>
-        <p><%= cv.languages %></p>
-
+    <!-- links -->
+    <% if (cv.links) { %>
+        <section>
+            <h2>Links</h2>
+            <p>
+                <a href="<%= cv.links %>" target="_blank">
+                    <%= cv.links %>
+                </a>
+            </p>
+        </section>
         <hr>
+    <% } %>
 
-        <h2>Links</h2>
-        <p><a href="<%= cv.links %>" target="_blank"><%= cv.links %></a></p>
+    <!-- references -->
+    <% if (cv.refs) { %>
+        <section>
+            <h2>References</h2>
+            <p><%= cv.refs %></p>
+        </section>
+    <% } %>
 
-        <hr>
-
-        <h2>References</h2>
-        <p><%= cv.refs %></p>
-    </body>
+</body>
 </html>
