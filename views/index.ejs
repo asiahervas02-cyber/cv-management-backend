@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AstonCV</title>
+    </head>
+    <body>
+        <h1>AstonCV</h1>
+        <a href="/search">Search CVs</a> |
+        <a href="/register">Register</a> |
+        <a href="/login">Login</a>
+
+        <h2> All CVs</h2>
+            <ul>
+                <% cvs.forEach(cv => { %>
+                <li>
+                    <a href="/cv/<%= cv.id %>"><%= cv.name %></a> -
+                    <%= cv.email %> — <%= cv.language %>
+                </li>
+            <% }) %>
+            </ul>
+    </body>
+</html>
