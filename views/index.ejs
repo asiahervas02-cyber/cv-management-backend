@@ -5,18 +5,34 @@
     </head>
     <body>
         <h1>AstonCV</h1>
-        <a href="/search">Search CVs</a> |
         <a href="/register">Register</a> |
         <a href="/login">Login</a>
 
+        <form method="GET" action="/" id="searchForm">
+            <input type="text" name="search" id="searchInput" placeholder="Search by name or language" value="<%= search %>">
+        </form>
+
         <h2> All CVs</h2>
-            <ul>
+            <ul id="cvList">
                 <% cvs.forEach(cv => { %>
                 <li>
-                    <a href="/cv/<%= cv.id %>"><%= cv.name %></a> -
-                    <%= cv.email %> — <%= cv.language %>
+                    <%= cv.name %> - <%= cv.email %> - <%= cv.language %>
+                    <a href="/cv/<%= cv.id %>">View CV</a>
                 </li>
             <% }) %>
             </ul>
+
+        <script>
+            const input = document.getElementById('searchInput');
+            const list = document.getElementById('cvList');
+
+            input.addEventListener('input', async () => {
+                const res = await fetch(`/api/search?q=${encodeURIComponent(input.value)}`);
+                const cvs = await res.json();
+                list.innerHTML = cvs.map(cv =>
+                    `<li><a href="/cv/${cv.id}">${cv.name}</a> — ${cv.email} — ${cv.language}</li>`
+                ).join('');
+            });
+        </script>
     </body>
 </html>

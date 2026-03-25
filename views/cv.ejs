@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= cv.name %> - AstonCV</title>
+    </head>
+    <body>
+        <a href="/">Back</a>
+
+        <h1><%= cv.name %></h1>
+        <p><%= cv.email %></p>
+
+        <hr>
+
+        <h2>Summary</h2>
+        <p><%= cv.summary %></p>
+
+        <hr>
+
+        <h2>Education</h2>
+        <p><%= cv.education %></p>
+
+        <hr>
+
+        <h2>Key Language</h2>
+        <p><%= cv.language %></p>
+
+        <hr>
+
+        <h2>Skills</h2>
+        <p><%= cv.skills %></p>
+
+        <hr>
+
+        <h2>Languages</h2>
+        <p><%= cv.languages %></p>
+
+        <hr>
+
+        <h2>Links</h2>
+        <p><a href="<%= cv.links %>" target="_blank"><%= cv.links %></a></p>
+
+        <hr>
+
+        <h2>References</h2>
+        <p><%= cv.refs %></p>
+    </body>
+</html>
