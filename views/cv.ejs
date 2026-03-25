@@ -1,89 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title><%= cv.name %> - AstonCV</title>
+    <title><%= cv.name %> — AstonCV</title>
+    <link rel="stylesheet" href="/cv.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
-    <a href="/">Back</a>
-
-    <!-- header -->
-    <header>
-        <h1><%= cv.name %></h1>
-        <p><%= cv.email %></p>
-
-        <% if (cv.language) { %>
-            <p><strong>Key Skill:</strong> <%= cv.language %></p>
+    <nav class="navbar">
+        <a href="/" class="logo">AstonCV</a>
+        <% if (user) { %>
+            <span class="nav-welcome">Welcome, <%= user.name %></span>
         <% } %>
-    </header>
-
-    <hr>
-
-    <!-- bio -->
-    <% if (cv.bio) { %>
-        <section>
-            <h2>Bio</h2>
-            <p><%= cv.bio %></p>
-        </section>
-        <hr>
-    <% } %>
-
-    <!-- summary -->
-    <% if (cv.summary) { %>
-        <section>
-            <h2>Summary</h2>
-            <p><%= cv.summary %></p>
-        </section>
-        <hr>
-    <% } %>
-
-    <!-- education -->
-    <% if (cv.education) { %>
-        <section>
-            <h2>Education</h2>
-            <p><%= cv.education %></p>
-        </section>
-        <hr>
-    <% } %>
-
-    <!-- skills -->
-    <% if (cv.skills) { %>
-        <section>
-            <h2>Skills</h2>
-            <p><%= cv.skills %></p>
-        </section>
-        <hr>
-    <% } %>
-
-    <!-- languages -->
-    <% if (cv.languages) { %>
-        <section>
-            <h2>Languages</h2>
-            <p><%= cv.languages %></p>
-        </section>
-        <hr>
-    <% } %>
-
-    <!-- links -->
-    <% if (cv.links) { %>
-        <section>
-            <h2>Links</h2>
-            <p>
-                <a href="<%= cv.links %>" target="_blank">
-                    <%= cv.links %>
+        <div class="nav-links">
+            <a href="/" class="nav-icon-link">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="nav-tooltip">Back</span>
+            </a>
+            <% if (user) { %>
+                <a href="/edit" class="nav-icon-link">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span class="nav-tooltip">Edit My CV</span>
                 </a>
-            </p>
-        </section>
-        <hr>
-    <% } %>
+                <a href="/logout" class="nav-icon-link">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span class="nav-tooltip">Logout</span>
+                </a>
+            <% } else { %>
+                <a href="/register" class="nav-btn">Register</a>
+                <a href="/login">Login</a>
+            <% } %>
+        </div>
+    </nav>
 
-    <!-- references -->
-    <% if (cv.refs) { %>
-        <section>
-            <h2>References</h2>
-            <p><%= cv.refs %></p>
-        </section>
-    <% } %>
+    <main class="cv-container">
+
+        <!-- header banner -->
+        <div class="cv-banner">
+            <div class="cv-banner-left">
+                <h1><%= cv.name %></h1>
+                <p class="cv-language"><i class="fa-solid fa-code"></i> <%= cv.language %></p>
+            </div>
+            <div class="cv-banner-right">
+                <p><i class="fa-solid fa-envelope"></i> <%= cv.email %></p>
+                <% if (cv.links) { %>
+                    <p><i class="fa-solid fa-link"></i> <a href="<%= cv.links %>" target="_blank"><%= cv.links %></a></p>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- body -->
+        <div class="cv-body">
+
+            <% if (cv.bio) { %>
+                <section class="cv-section">
+                    <h2><i class="fa-solid fa-user"></i> Bio</h2>
+                    <p><%= cv.bio %></p>
+                </section>
+                <hr class="divider">
+            <% } %>
+
+            <% if (cv.summary) { %>
+                <section class="cv-section">
+                    <h2><i class="fa-solid fa-align-left"></i> Summary</h2>
+                    <p><%= cv.summary %></p>
+                </section>
+                <hr class="divider">
+            <% } %>
+
+            <% if (cv.education) { %>
+                <section class="cv-section">
+                    <h2><i class="fa-solid fa-graduation-cap"></i> Education</h2>
+                    <p><%= cv.education %></p>
+                </section>
+                <hr class="divider">
+            <% } %>
+
+            <% if (cv.skills) { %>
+                <section class="cv-section">
+                    <h2><i class="fa-solid fa-code"></i> Skills</h2>
+                    <div class="tags">
+                        <% cv.skills.split(',').forEach(skill => { %>
+                            <span class="tag"><%= skill.trim() %></span>
+                        <% }) %>
+                    </div>
+                </section>
+                <hr class="divider">
+            <% } %>
+
+            <div class="cv-bottom">
+                <% if (cv.languages) { %>
+                    <section class="cv-section">
+                        <h2><i class="fa-solid fa-language"></i> Languages</h2>
+                        <p><%= cv.languages %></p>
+                    </section>
+                <% } %>
+
+                <% if (cv.refs) { %>
+                    <section class="cv-section">
+                        <h2><i class="fa-solid fa-address-book"></i> References</h2>
+                        <p><%= cv.refs %></p>
+                    </section>
+                <% } %>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>AstonCV © 2026</p>
+        <p class="footer-subtext">Developed by Hasnain A</p>
+    </footer>
 
 </body>
 </html>
