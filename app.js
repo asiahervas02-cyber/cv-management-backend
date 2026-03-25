@@ -17,21 +17,13 @@ app.use(express.static('public'));
 // helmet
 app.use(helmet());
 
-// rate limit on login
-const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 15,
-    message: 'Too many login attempts, please try again later.'
-});
-app.use('/login', loginLimiter);
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
 }));
 
-// csrf middleware
+// generate a csrf token for each session and expose to all ejs forms
 app.use((req, res, next) => {
     if (!req.session.csrfToken) {
         req.session.csrfToken = crypto.randomBytes(32).toString('hex');
@@ -48,6 +40,17 @@ app.use((req, res, next) => {
         }
     }
     next();
+});
+
+// rate limit on login
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    handler: (req, res) => {
+        res.status(429).render('login', {
+            error: 'Too many login attempts, please try again later.'
+        });
+    }
 });
 
 // user info for navbar
@@ -161,7 +164,7 @@ app.get('/login', (req, res) => {
     res.render('login', { error: null });
 });
 
-app.post('/login', async (req, res, next) => {
+app.post('/login', loginLimiter, async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
@@ -226,7 +229,6 @@ app.post('/edit', async (req, res, next) => {
             bio,
             summary,
             skills,
-            profile,
             languages,
             links,
             refs,
@@ -255,7 +257,7 @@ app.post('/edit', async (req, res, next) => {
         }
 
         await db.query(
-            'UPDATE cvs SET name=?, email=?, education=?, language=?, bio=?, summary=?, skills=?, profile=?, languages=?, links=?, refs=?, password=? WHERE id=?',
+            'UPDATE cvs SET name=?, email=?, education=?, language=?, bio=?, summary=?, skills=?, languages=?, links=?, refs=?, password=? WHERE id=?',
             [
                 name,
                 email,
@@ -264,7 +266,6 @@ app.post('/edit', async (req, res, next) => {
                 bio,
                 summary,
                 skills,
-                profile,
                 languages,
                 links,
                 refs,
