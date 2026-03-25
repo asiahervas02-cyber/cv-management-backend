@@ -5,8 +5,13 @@
     </head>
     <body>
         <h1>AstonCV</h1>
-        <a href="/register">Register</a> |
-        <a href="/login">Login</a>
+        <% if (user) { %>
+            <span>Welcome, <%= user.name %></span> |
+            <a href="/logout">Logout</a>
+        <% } else { %>
+            <a href="/register">Register</a> |
+            <a href="/login">Login</a>
+        <% } %>
 
         <form method="GET" action="/" id="searchForm">
             <input type="text" name="search" id="searchInput" placeholder="Search by name or language" value="<%= search %>">

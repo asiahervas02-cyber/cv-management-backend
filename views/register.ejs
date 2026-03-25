@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Register - AstonCV</title>
+    </head>
+    <body>
+        <a href="/">Back to Home</a>
+        <h1>Register</h1>
+        <% if (error) { %>
+            <p style="color: red"><%= error %></p>
+        <% } %>
+        <form method="POST" action="/register">
+            <input type="text" name="name" placeholder="Full Name" required><br>
+            <input type="email" name="email" placeholder="Email" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <button type="submit">Register</button>
+        </form>
+        <a href="/login">Already have an account?<strong> Login</strong></a>
+    </body>
+</html>
