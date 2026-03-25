@@ -1,9 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
+dotenv.config();
 const bcrypt = require('bcrypt');
 const session = require('express-session');
-dotenv.config();
-
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const crypto = require('crypto');
 const db = require('./db');
 
 const app = express();
@@ -12,11 +14,41 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+// helmet
+app.use(helmet());
+
+// rate limit on login
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 15,
+    message: 'Too many login attempts, please try again later.'
+});
+app.use('/login', loginLimiter);
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true
 }));
+
+// csrf middleware
+app.use((req, res, next) => {
+    if(!req.session.csrfToken) {
+        req.session.csrfToken = crypto.randomBytes(32).toString('hex');
+    }
+    res.locals.csrfToken = req.session.csrfToken;
+    next();
+});
+
+// csrf validation for post requests
+app.use((req, res, next) => {
+    if (req.method === 'POST') {
+        if (req.body._csrf !== req.session.csrfToken) {
+            return res.status(403).send('Invalid CSRF token');
+        }
+    }
+    next();
+});
 
 app.use(async (req, res, next) => {
     if (req.session.userId) {
