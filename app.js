@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 dotenv.config();
 
+const db = require('./db');
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -25,8 +27,6 @@ app.use(async (req, res, next) => {
     }
     next();
 });
-
-const db = require('./db');
 
 // home - list all CVs
 app.get('/', async (req, res) => {
@@ -92,6 +92,35 @@ app.post('/login', async (req, res) => {
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
+});
+
+// edit cv
+app.get('/edit', async (req, res) => {
+    if (!req.session.userId) return res.redirect('/login');
+    const [rows] = await db.query('SELECT * FROM cvs WHERE id = ?', [req.session.userId]);
+    res.render('edit', { cv: rows[0], error: null });
+});
+
+app.post('/edit', async (req, res) => {
+    if (!req.session.userId) return res.redirect('/login');
+    const { name, email, education, language, summary, skills, profile, languages, links, refs, currentPassword, newPassword } = req.body;
+
+    const [rows] = await db.query('SELECT * FROM cvs WHERE id = ?', [req.session.userId]);
+    let hashedPassword = rows[0].password;
+
+    if (currentPassword && newPassword) {
+        const match = await bcrypt.compare(currentPassword, rows[0].password);
+        if (!match) {
+            return res.render('edit', { cv: rows[0], error: 'Current password is incorrect' });
+        }
+        hashedPassword = await bcrypt.hash(newPassword, 10);
+    }
+
+    await db.query(
+        'UPDATE cvs SET name=?, email=?, education=?, language=?, summary=?, skills=?, profile=?, languages=?, links=?, refs=?, password=? WHERE id=?',
+        [name, email, education, language, summary, skills, profile, languages, links, refs, hashedPassword, req.session.userId]
+    );
+    res.redirect('/cv/' + req.session.userId);
 });
 
 app.listen(process.env.PORT, () => {

@@ -7,6 +7,7 @@
         <h1>AstonCV</h1>
         <% if (user) { %>
             <span>Welcome, <%= user.name %></span> |
+            <a href="/edit">Edit my CV</a> |
             <a href="/logout">Logout</a>
         <% } else { %>
             <a href="/register">Register</a> |
