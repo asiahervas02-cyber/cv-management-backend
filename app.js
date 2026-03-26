@@ -280,6 +280,6 @@ app.post('/edit', async (req, res, next) => {
     }
 });
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`server running on port ${process.env.PORT || 3000}`);
+app.listen(process.env.PORT || 7002, () => {
+    console.log(`server running on port ${process.env.PORT || 7002}`);
 });
