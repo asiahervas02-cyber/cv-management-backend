@@ -35,7 +35,7 @@ app.use(
 );
 
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'change-this-secret',
     resave: false,
     saveUninitialized: true
 }));
