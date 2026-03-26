@@ -7,9 +7,9 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
-    ssl: {
-        rejectUnauthorized: false
-    }
+    ssl: process.env.DB_HOST === 'crossover.proxy.rlwy.net'
+        ? { rejectUnauthorized: false }
+        : undefined
 });
 
 module.exports = pool.promise();
