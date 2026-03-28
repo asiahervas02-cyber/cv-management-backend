@@ -26,7 +26,6 @@ The application allows users to register, log in, view CVs, edit profile data, a
 ## 📸 Preview
 
 ![Home](./assets/preview-home.png)
-![CV Detail](./assets/preview-cv.png)
 
 ---
 
