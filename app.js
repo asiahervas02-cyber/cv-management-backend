@@ -9,6 +9,11 @@ const crypto = require('crypto');
 const db = require('./db');
 
 const app = express();
+const port = process.env.PORT || 7002;
+
+if (!process.env.SESSION_SECRET) {
+    throw new Error('Missing required environment variable: SESSION_SECRET');
+}
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
@@ -35,7 +40,7 @@ app.use(
 );
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'change-this-secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
 }));
@@ -297,6 +302,6 @@ app.post('/edit', async (req, res, next) => {
     }
 });
 
-app.listen(process.env.PORT || 7002, () => {
-    console.log(`server running on port ${process.env.PORT || 7002}`);
+app.listen(port, () => {
+    console.log(`server running on port ${port}`);
 });

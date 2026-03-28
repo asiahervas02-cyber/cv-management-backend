@@ -1,13 +1,23 @@
 {
-  "name": "astoncv",
+  "name": "cv-management-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Node.js, Express, and MySQL backend for a CV management system with authentication and live search",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-  "keywords": [],
+  "keywords": [
+    "nodejs",
+    "express",
+    "mysql",
+    "backend",
+    "full-stack",
+    "authentication",
+    "web-app",
+    "mvc",
+    "javascript"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
